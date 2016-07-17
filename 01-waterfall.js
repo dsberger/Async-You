@@ -3,13 +3,10 @@ var http = require('http')
 var fs = require('fs')
 var filePath = process.argv[2]
 
-async.waterfall([
-  readTheUrlFile,
-  getRequestForContents
-], function (err, result) {
-  if (err) { return console.error(err) }
-  console.log(result)
-})
+async.waterfall(
+  [readTheUrlFile, getRequestForContents],
+  logResult
+)
 
 function readTheUrlFile (callback) {
   fs.readFile(filePath, function (err, data) {
@@ -31,4 +28,9 @@ function getRequestForContents (url, callback) {
   }).on('error', function (err) {
     callback(err)
   })
+}
+
+function logResult (err, result) {
+  if (err) { return console.log(err) }
+  console.log(result)
 }
