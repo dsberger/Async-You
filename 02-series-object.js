@@ -10,10 +10,7 @@ async.series({
   requestTwo: function (callback) {
     fetchUrl(urlTwo, callback)
   }
-}, function (err, results) {
-  if (err) { return console.error(err) }
-  console.log(results)
-})
+}, logResult)
 
 function fetchUrl (url, callback) {
   var body = ''
@@ -26,4 +23,9 @@ function fetchUrl (url, callback) {
       callback(null, body)
     })
   })
+}
+
+function logResult (err, result) {
+  if (err) { return console.log(err) }
+  console.log(result)
 }
