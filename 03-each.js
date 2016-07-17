@@ -3,21 +3,21 @@ var http = require('http')
 
 var urls = process.argv.slice(2)
 
-async.each(
-  urls,
-  function (url, callback) {
-    http.get(url, function (res) {
-      res.on('data', function (chunk) {
-      })
+async.each(urls, checkForErrors, logError)
 
-      res.on('end', function () {
-        callback(null)
-      })
-    }).on('error', function (err) {
-      callback(err)
+function checkForErrors (url, callback) {
+  http.get(url, function (res) {
+    res.on('data', function (chunk) {
     })
-  },
-  function (err) {
-    if (err) { console.log(err) }
-  }
-)
+
+    res.on('end', function () {
+      callback(null)
+    })
+  }).on('error', function (err) {
+    callback(err)
+  })
+}
+
+function logError (err) {
+  if (err) { return console.log(err) }
+}
