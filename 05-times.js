@@ -5,16 +5,9 @@ var hostname = process.argv[2]
 var port = process.argv[3]
 
 async.series({
-  create: function (callback) {
-    createFiveUsers(callback)
-  },
-  retrieve: function (callback) {
-    getUsers(callback)
-  }
-}, function (err, results) {
-  if (err) { return console.log(err) }
-  console.log(results.retrieve)
-})
+  create: createFiveUsers,
+  retrieve: getUsers
+}, logResult)
 
 function createFiveUsers (callback) {
   async.times(5, function (n, next) {
@@ -56,4 +49,9 @@ function getUsers (callback) {
       callback(null, body)
     })
   })
+}
+
+function logResult (err, result) {
+  if (err) { return console.log(err) }
+  console.log(result.retrieve)
 }
